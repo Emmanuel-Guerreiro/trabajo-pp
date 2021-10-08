@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+/**
+* Por favor leer README.md o README.txt antes de empezar.
+* @author Emmanuel Guerreiro - Legajo 47262
+*/
 package pkg47262;
 
 import pkgBank.Account;
 
-/**
- *
- * @author emma
- */
 public class Main {
 
     /**
