@@ -1,7 +1,6 @@
 package pkgPpl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import pkgBank.Account;
 import pkgBank.Card;
 import pkgBank.loan.Loan;
@@ -51,9 +50,9 @@ public class Customer {
         //Todo: complete this. Needs to get array list length
         //Displays on stdout Customer data formated
         String f = String.format("Cliente n°: %x \n Nombre: %s Cuentas: \n "
-                + "Creditos pedidos:", 
-                this.id, this.name );
-        
+                + "Creditos pedidos:",
+                this.id, this.name);
+
         System.out.println(f);
     }
 
@@ -83,8 +82,11 @@ public class Customer {
         return -1;
     }
 
+    //todo: THis should throw an exception
     public Account openAccount(Account acc) {
         /*Creates new account on customer from an account object
+        
+        Will be used from Teller's openAccount method
         
         Checks if isnt already on the customer's list, and if the account
         has already other customer
@@ -112,6 +114,7 @@ public class Customer {
         return acc;
     }
 
+    //TOdo: throws same exception as open account on failure
     public int closeAccount(int accId) {
         //Drops account from customer's accounts list
         //This algorithm which is O(n) can be optimized if the accList
@@ -137,12 +140,15 @@ public class Customer {
     }
 
     //todo: Should return an int?
-    public void applyForLoan(Teller t, Loan l) {
+    //Todo: overload this with, but receiven loan initializing data. And create
+    //it on inside the method
+    public void applyForLoan(Teller t, Account acc, Loan l) {
         //Receive's a teller, check if its on customers list
         //Send request to Teller, and adds it to LoanList
         boolean isTellerAv = isTellerAvailable(t);
+        //todo: Check in here if loan has this client id?
         if (isTellerAv) {
-            t.loanRequest(this, l);
+            t.loanRequest(this, acc, l);
         } else {
             //Format string sending that teller.name doesnt isnt available
             //for this customer
