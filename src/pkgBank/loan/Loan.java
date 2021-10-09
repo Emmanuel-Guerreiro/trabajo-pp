@@ -2,34 +2,44 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pkgBank;
+package pkgBank.loan;
 
+import pkgBank.Account;
 import pkgPpl.Customer;
 
 /**
  *
  * @author emma
  */
+
+
 public class Loan {
     private static int loanCount;
     /*
     * About id:
     * - Will be setted automatically on object instantiation
-    * - Cant be modified. Just readed. So, is setted as final
-     */
+    * About all attributes: 
+    * All attributes where defined as because, shouldnt be modified once are created
+    * (Emulating a real world situation)
+    */
     private final int id;
-    private final String type;
+    //LoanTypes is an enum defined on Type file (this package)
+    private final LoanTypes type;
     private final int accountId;
     private final int customerId;
+    //Added by myself. Extends Loan and Account functionality
+    private final float amount;
     
-    
-    public Loan(Customer customer, Account account, String t){
+    //Todo: set types as enum or smth similiat to narrow down options
+    public Loan(Customer customer, Account account, LoanTypes t, float amount){
         System.out.println("Initializing Loan instance");
         this.id = ++loanCount;
         //todo: set customerId with customer.getId method
         this.customerId = 2;
         this.accountId = account.getId();
+        //Check Types definition for possible values. Those can be extended 
         this.type = t;
+        this.amount = amount;
     }
     
     //getters
@@ -45,7 +55,11 @@ public class Loan {
         return this.accountId;
     }
     
-    public String getType(){
+    public float getAmount(){
+        return this.amount;
+    }
+    
+    public LoanTypes getType(){
         return this.type;
     }
 }

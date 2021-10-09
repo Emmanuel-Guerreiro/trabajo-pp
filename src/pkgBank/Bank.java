@@ -19,6 +19,8 @@ public class Bank {
     private ArrayList<Customer> customerList;
     private ArrayList<Teller> tellerList;
 
+    
+    //Todo: Add Teller and Customer on constructors. Must be at least one of each
     public Bank(int id, String n, String l) {
         System.out.println("Initializing Bank instance");
         this.bankId = id;
