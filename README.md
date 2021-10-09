@@ -14,9 +14,9 @@
 * Los id de los distintos objetos son definidos automaticamente por los 
   constructures. Esto se realiza con una variable de clase, que se 
   autoincrementa en cada nueva instanciacion. 
-* Se ha asumido que todos los metodos son private, a menos que algo indique 
+* Se ha asumido que todos los atributos son private, a menos que algo indique 
   lo contrario
-* Se ha asumido que todos los metodos son, a menos que algo indique lo contrario
+* Se ha asumido que todos los metodos son public, a menos que algo indique lo contrario
 * Se ha agregado la clase CreditCard para poder interactuar con el método de 
   Request card perteneciente a la clase Customer. (Ver imagen 1 sobre el modelo 
   de clases resultante)

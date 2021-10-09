@@ -14,12 +14,13 @@ import pkgPpl.Customer;
  */
 public class Teller {
 
+    private static int tellCount;
     private int id;
     private String name;
     private ArrayList<Customer> customerAt;
 
     public Teller() {
-
+        this.id = ++tellCount;
     }
 
     public float collectMoney(float inc, Account a) {
@@ -43,16 +44,15 @@ public class Teller {
     public void loanRequest(Customer c, Loan l) {
         //Gives Add a new loan to a customer. And returns it
     }
-    
 
-    public void provideInfo(){
+    public void provideInfo() {
         //Formats Teller's info and send it to stdout
     }
-    
-    public void issueCard(){
+
+    public void issueCard() {
         //Add an issue to a card?
     }
-    
+
     //Auxiliar methods for better interaction
     public int addCustomer(Customer c) {
         //If the customer isnt on the list, will add him and return 1 
@@ -66,5 +66,13 @@ public class Teller {
     public void delCustomer(Customer c) {
         //If c is attended by this teller, will pop him from
         //the list
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

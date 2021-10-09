@@ -19,7 +19,8 @@ public class Account {
     //Added to complement Teller's and Customer's functionality
     private float credit;
 
-    public Account(int cId, float credit) {
+    public Account(int cId, float credit) { 
+        //This is implemented on Customer constructor
         System.out.println("Initializing Account instance");
         //This will ensure that every Account has it's own id
         this.id = ++accountsCount;
@@ -35,6 +36,7 @@ public class Account {
         this.credit = credit;
     }
 
+    
     //Todo: check correct implementation of exception throwing
     public float incCredit(float newCredit) {
         //Will accept a non negative float, and then increment to acc credit
@@ -47,10 +49,11 @@ public class Account {
     }
     
     //Todo: Check exception throwing too
+    //todo: If dec > credit should return another exception?
     public float decCredit(float dec){
         //Will accept a non negative float, and then decrement to add credit
         //if arg is negative, will throw IllegalArgumentException
-        if(dec >= 0){
+        if(dec >= 0 && this.credit >= dec){
             this.credit -= dec;
             return this.credit;
         }
