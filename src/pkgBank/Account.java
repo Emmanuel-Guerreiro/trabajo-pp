@@ -34,8 +34,7 @@ public class Account {
         this.credit = credit;
     }
 
-    //Todo: check correct implementation of exception throwing
-    public float incCredit(float newCredit) {
+    public float incCredit(float newCredit) throws IllegalArgumentException{
         //Will accept a non negative float, and then increment to acc credit
         //If arg is negative, will throw IllegalArgumentException 
         if (newCredit < 0) {
@@ -46,8 +45,6 @@ public class Account {
         return this.credit;
     }
 
-    //Todo: Check exception throwing too
-    //todo: If dec > credit should return another exception?
     public float decCredit(float dec) 
             throws IllegalArgumentException, ArithmeticException {
         //Will accept a non negative float, and then decrement to add credit
