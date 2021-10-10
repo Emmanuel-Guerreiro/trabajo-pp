@@ -1,5 +1,6 @@
 package pkgBank;
 
+import java.util.ArrayList;
 import pkgPpl.Customer;
 
 /**
@@ -12,6 +13,7 @@ public class Card {
     private static int cardCount;
     private final int customerId;
     private final int id;
+    private ArrayList<String> issues;
     
     public Card(Customer c){
         this.id = ++cardCount;
@@ -29,5 +31,17 @@ public class Card {
     
     public int getId(){
         return this.id;
+    }
+    
+    public ArrayList<String> getIssues(){
+        return issues;
+    }
+    
+    public void addIsue(String issue){
+        issues.add(issue);
+    }
+    
+    public int getIssueCount(){
+        return issues.size();
     }
 }

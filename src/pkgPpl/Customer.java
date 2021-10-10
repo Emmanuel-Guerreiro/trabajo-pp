@@ -2,6 +2,7 @@ package pkgPpl;
 
 import java.util.ArrayList;
 import pkgBank.Account;
+import pkgBank.Bank;
 import pkgBank.Card;
 import pkgBank.loan.Loan;
 import pkgBank.Teller;
@@ -14,6 +15,7 @@ import pkgExceptions.ErrorObjeto;
 public class Customer {
 
     private static int customerCount;
+    private int bankId;
     private int id;
     private String name;
     private String address;
@@ -24,13 +26,26 @@ public class Customer {
     private ArrayList<Card> cards;
 
     //todo: Check correct initializing variables
+    //TOdo: Add a new constructor which adds bank on initialization
+    /*This is the minimum amount of attributes to be initialized on new 
+    customer instance*/
     public Customer(String name, String address, int phone, Teller tel) throws ErrorObjeto {
-        //This is the minimum amount of attributes to be initialized on new 
-        //customer instance
+        /**
+         * This constructor is recommended to be used before any bank is defined
+         * If there's already one, use the next constructor
+         *
+         * @param name
+         * @param address
+         * @param phone
+         * @param tel
+         *
+         * @throws pkgExceptions.ErrorObjeto
+         */
 
         System.out.println("Initializing Customer instance");
 
-        if (Customer.customerCount > 3) {
+        //Just can be 3 customers (id between 0 and 2)
+        if (Customer.customerCount >= 2) {
             throw new ErrorObjeto("Customer");
         }
 
@@ -46,12 +61,45 @@ public class Customer {
         avTeller.add(tel);
     }
 
+      public Customer(String name, String address, int phone,Bank bank ,Teller tel) throws ErrorObjeto {
+        /**
+         * This constructor is recommended to be used before any bank is defined
+         * If there's already one, use the next constructor
+         *
+         * @param name
+         * @param address
+         * @param phone
+         * @param tel
+         *
+         * @throws pkgExceptions.ErrorObjeto
+         */
+
+        System.out.println("Initializing Customer instance");
+
+        //Just can be 3 customers (id between 0 and 2)
+        if (Customer.customerCount >= 2) {
+            throw new ErrorObjeto("Customer");
+        }
+        
+                this.id = ++customerCount;
+
+        this.name = name;
+        this.address = address;
+        this.phoneNo = phone;
+        this.bankId = bank.getId();
+        //A customer must have at least one account
+        Account fAcc = new Account(this.id, 0);
+        accList.add(fAcc);
+        //A customer must have at least one Teller to interact with
+        avTeller.add(tel);
+      }
+    
+    
     public void generalInquiry() {
-        //Todo: complete this. Needs to get array list length
         //Displays on stdout Customer data formated
-        String f = String.format("Cliente n°: %x \n Nombre: %s Cuentas: \n "
-                + "Creditos pedidos:",
-                this.id, this.name);
+        String f = String.format("Cliente n°: %x \n Nombre: %s Cuentas: %x \n "
+                + "Creditos pedidos: %x",
+                this.id, this.name, accList.size(), avLoans.size());
 
         System.out.println(f);
     }
@@ -147,6 +195,7 @@ public class Customer {
         //Send request to Teller, and adds it to LoanList
         boolean isTellerAv = isTellerAvailable(t);
         //todo: Check in here if loan has this client id?
+        //Should access to teller's method or can be done directly?
         if (isTellerAv) {
             t.loanRequest(this, acc, l);
         } else {
@@ -156,6 +205,28 @@ public class Customer {
                     t.getName());
             System.out.println(fs1);
         }
+    }
+
+    //Used on Teller class for new loan on this client's list
+    public int addLoan(Loan l) {
+        //Checking inside, will prevent problems. May be redundant on some cases
+        //but is better
+
+        //THis may be cleaner on a new function, but is redundant. Is the unique
+        //place where is checked
+        boolean inside = false;
+        for (Loan iL : avLoans) {
+            if (iL.getId() == l.getId()) {
+                inside = true;
+            }
+        }
+
+        if (inside && l.getCustomer() == this.id) {
+            avLoans.add(l);
+            return 1;
+        }
+
+        return -1;
     }
 
     public Card RequestCard() {
@@ -229,4 +300,15 @@ public class Customer {
         this.phoneNo = p;
     }
 
+    public void setBank(int bId) {
+        this.bankId = bId;
+    }
+
+    public int getBank() {
+        return this.bankId;
+    }
+    
+    public ArrayList<Card> getCards(){
+       return this.cards;
+    }
 }

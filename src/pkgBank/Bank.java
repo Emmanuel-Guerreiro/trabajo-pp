@@ -5,6 +5,7 @@
 package pkgBank;
 
 import java.util.ArrayList;
+import pkgExceptions.ErrorObjeto;
 import pkgPpl.Customer;
 
 /**
@@ -13,44 +14,68 @@ import pkgPpl.Customer;
  */
 public class Bank {
 
-    private int bankId;
-    final private String name; //Check if has sense to be final
+    //BankCount will initialize on 1, because is easier to check if 
+    //a customer already has a bank
+    private static int bankCount = 1;
+    
+    private final int bankId;
+    private final String name;
     private String location;
     private ArrayList<Customer> customerList;
     private ArrayList<Teller> tellerList;
 
-    
-    //Todo: Add Teller and Customer on constructors. Must be at least one of each
-    public Bank(int id, String n, String l) {
+    //Cant initialize more than 3 banks
+    public Bank(String n, String l, Teller t, Customer c) throws ErrorObjeto {
         System.out.println("Initializing Bank instance");
-        this.bankId = id;
+        if (Bank.bankCount >= 3) {
+            throw new ErrorObjeto("Bank");
+        }
+        this.bankId = bankCount++;
         this.name = n;
         this.location = l;
+        customerList.add(c);
+        tellerList.add(t);
     }
 
-    public Bank(int id, String n, String l, Teller t) {
-        System.out.println("Initializing Bank instance");
-        this.bankId = id;
-        this.name = n;
-        this.location = l;
-        this.tellerList.add(t);
+    public int addCustomer(Customer c) {
+        //Add's new customer to the list, and set customer bank id to this id
+        boolean isAlready = false;
+        for (Customer iC : customerList) {
+            if (iC.getId() == c.getId()) {
+                isAlready = true;
+            }
+        }
+
+        //If a client has a bank already, c.bankId won be 0
+        if (!isAlready && c.getBank() == 0) {
+            this.customerList.add(c);
+            c.setBank(bankId);
+            return 1;
+        }
+
+        return -1;
     }
 
-    public void addCustomer(Customer c) {
-        this.customerList.add(c);
-    }
+    public int addTeller(Teller t) {
+        boolean isAlready = false;
+        for (Teller iT : tellerList) {
 
-    public void addTeller(Teller t) {
-        this.tellerList.add(t);
+            if (iT.getId() == t.getId()) {
+                isAlready = true;
+            }
+        }
+        //If a teller has a bank already, t.bankId wont be 0
+        if (!isAlready && t.getBank() == 0) {
+            this.tellerList.add(t);
+            t.setBank(this.bankId);
+            return 1;
+        }
+
+        return -1;
     }
 
     /*All setters and getters*/
-    public void setBankId(int i) {
-        this.bankId = i;
-    }
-
-    //todo: Check this. Just return if has been initialized
-    public int getBankId(int i) {
+    public int getId() {
         return this.bankId;
     }
 
