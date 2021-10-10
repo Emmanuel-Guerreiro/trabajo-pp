@@ -59,13 +59,15 @@ public class Teller {
         //list.
         //If allOk => Returns 1
         //If !allOk => Returns -1
-
-        int status = c.closeAccount(acc.getId());
-
-        return status;
+        try {
+            c.closeAccount(acc.getId());
+            return 1;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
     }
 
-    
     public Loan loanRequest(Customer c, Account acc, Loan l)
             throws IllegalArgumentException {
         /**

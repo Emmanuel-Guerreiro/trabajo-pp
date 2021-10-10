@@ -17,7 +17,7 @@ public class Account {
     //Added to complement Teller's and Customer's functionality
     private float credit;
 
-    public Account(int cId, float credit) { 
+    public Account(int cId, float credit) {
         //This is implemented on Customer constructor
         System.out.println("Initializing Account instance");
         //This will ensure that every Account has it's own id
@@ -34,28 +34,32 @@ public class Account {
         this.credit = credit;
     }
 
-    
     //Todo: check correct implementation of exception throwing
     public float incCredit(float newCredit) {
         //Will accept a non negative float, and then increment to acc credit
         //If arg is negative, will throw IllegalArgumentException 
-        if (newCredit >= 0) {
-            this.credit += newCredit;
-            return this.credit;
+        if (newCredit < 0) {
+            throw new IllegalArgumentException(Float.toString(newCredit));
         }
-        throw new IllegalArgumentException(Float.toString(newCredit));
+
+        this.credit += newCredit;
+        return this.credit;
     }
-    
+
     //Todo: Check exception throwing too
     //todo: If dec > credit should return another exception?
-    public float decCredit(float dec){
+    public float decCredit(float dec) 
+            throws IllegalArgumentException, ArithmeticException {
         //Will accept a non negative float, and then decrement to add credit
         //if arg is negative, will throw IllegalArgumentException
-        if(dec >= 0 && this.credit >= dec){
-            this.credit -= dec;
-            return this.credit;
+        if (dec < 0) {
+            throw new IllegalArgumentException(Float.toString(dec));
+        } else if (this.credit < dec) {
+            throw new ArithmeticException("Cant discound this amount");
         }
-        throw new IllegalArgumentException(Float.toString(dec));
+        
+        this.credit -= dec;
+        return this.credit;
     }
 
     //Getters
@@ -70,6 +74,5 @@ public class Account {
     public static void getCount() {
         System.out.println("Cuentas creadas: " + accountsCount);
     }
-    
-    
+
 }

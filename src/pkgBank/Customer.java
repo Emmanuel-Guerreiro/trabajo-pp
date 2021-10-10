@@ -6,6 +6,7 @@ import pkgBank.Bank;
 import pkgBank.Card;
 import pkgBank.loan.Loan;
 import pkgBank.Teller;
+import pkgBank.loan.LoanTypes;
 import pkgExceptions.ErrorObjeto;
 
 /**
@@ -25,8 +26,6 @@ public class Customer {
     private ArrayList<Loan> avLoans;
     private ArrayList<Card> cards;
 
-    //todo: Check correct initializing variables
-    //TOdo: Add a new constructor which adds bank on initialization
     /*This is the minimum amount of attributes to be initialized on new 
     customer instance*/
     public Customer(String name, String address, int phone, Teller tel) throws ErrorObjeto {
@@ -61,7 +60,7 @@ public class Customer {
         avTeller.add(tel);
     }
 
-      public Customer(String name, String address, int phone,Bank bank ,Teller tel) throws ErrorObjeto {
+    public Customer(String name, String address, int phone, Bank bank, Teller tel) throws ErrorObjeto {
         /**
          * This constructor is recommended to be used before any bank is defined
          * If there's already one, use the next constructor
@@ -80,8 +79,8 @@ public class Customer {
         if (Customer.customerCount >= 2) {
             throw new ErrorObjeto("Customer");
         }
-        
-                this.id = ++customerCount;
+
+        this.id = ++customerCount;
 
         this.name = name;
         this.address = address;
@@ -92,9 +91,8 @@ public class Customer {
         accList.add(fAcc);
         //A customer must have at least one Teller to interact with
         avTeller.add(tel);
-      }
-    
-    
+    }
+
     public void generalInquiry() {
         //Displays on stdout Customer data formated
         String f = String.format("Cliente n°: %x \n Nombre: %s Cuentas: %x \n "
@@ -113,7 +111,6 @@ public class Customer {
         return -1;
     }
 
-    //Todo: check if this may throw an exception
     public float withdrawMoney(Account acc, float disc) {
         //Discounts money from Customer's account
         //And returns new account's balance
@@ -122,7 +119,8 @@ public class Customer {
             try {
                 float newC = acc.decCredit(disc);
                 return newC;
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | ArithmeticException e) {
+                System.out.println(e.getMessage());
                 return -1;
             }
         }
@@ -130,24 +128,36 @@ public class Customer {
         return -1;
     }
 
-    //todo: THis should throw an exception
-    public Account openAccount(Account acc) {
-        /*Creates new account on customer from an account object
-        
-        Will be used from Teller's openAccount method
-        
-        Checks if isnt already on the customer's list, and if the account
-        has already other customer
+    public Account openAccount(Account acc) throws IllegalArgumentException {
+        /**
+         * Creates new account on customer from an account object
+         *
+         * Will be used from Teller's openAccount method
+         *
+         * Checks if is not already on the customer's list, and if the account
+         * has already other customer
+         *
+         * @param acc
+         * @returns acc
          */
         if (!isAccAv(acc) && acc.getCustomer() == this.id) {
             accList.add(acc);
         } else {
-            System.out.println("xd");
+            String f = String.format("Account n° %x does not belongs to customer %s",
+                    acc.getId(), this.id);
+            throw new IllegalArgumentException(f);
         }
         return acc;
     }
 
     public Account openAccount() {
+        /**
+         * Creates a new account with credit 0 and adds it to client's list
+         *
+         * Not exception thrown because there si no conflictive argument
+         *
+         * @returns acc: return the new account created
+         */
         //This will open a new account with credit 0 and returns it
         Account acc = new Account(this, 0);
         accList.add(acc);
@@ -162,18 +172,20 @@ public class Customer {
         return acc;
     }
 
-    //TOdo: throws same exception as open account on failure
-    public int closeAccount(int accId) {
+    public void closeAccount(int accId) throws IllegalArgumentException {
         //Drops account from customer's accounts list
         //This algorithm which is O(n) can be optimized if the accList
         //is implemented with a HashMap instead of an ArrayList
         int idx = isAccWIdx(accId);
-        if (idx != -1) {
-            accList.remove(idx);
-            return 1;
+        if (idx == -1) {
+            String f = String.format("Account n°: %x does not belongs to this customer",
+                    accId);
+            throw new IllegalArgumentException(f);
         }
-        System.out.println("This account doesnt belongs to " + this.name);
-        return -1;
+
+        //If arrived here, there is no conflict to remove the item
+        accList.remove(idx);
+
     }
 
     public void availableTellers() {
@@ -187,23 +199,35 @@ public class Customer {
         }
     }
 
-    //todo: Should return an int?
-    //Todo: overload this with, but receiven loan initializing data. And create
-    //it on inside the method
-    public void applyForLoan(Teller t, Account acc, Loan l) {
-        //Receive's a teller, check if its on customers list
-        //Send request to Teller, and adds it to LoanList
-        boolean isTellerAv = isTellerAvailable(t);
-        //todo: Check in here if loan has this client id?
-        //Should access to teller's method or can be done directly?
-        if (isTellerAv) {
+   
+    public Loan applyForLoan(Teller t, Account acc, Loan l) {
+        /*Teller.loanRequest can throw IllegalArgumentException
+        There's no need for account, loan and customer checking. Is all done 
+        in the method*/
+        try {
             t.loanRequest(this, acc, l);
-        } else {
-            //Format string sending that teller.name doesnt isnt available
-            //for this customer
-            String fs1 = String.format("Teller %s isnt available for this customer",
-                    t.getName());
-            System.out.println(fs1);
+            return l;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            //This null may be carefully handled
+            //Isnt the best solution, but didnt came up with another idea
+            return null;
+        }
+    }
+
+    public Loan applyForLoan(Teller t, Account acc, LoanTypes type, float amount) {
+        try {
+            //Both methods can throw the same exception. So isnt necessary
+            //to make nested try-catch blocks
+            Loan nl = new Loan(this, acc, type, amount);
+            t.loanRequest(this, acc, nl);
+            
+            return nl;         
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            //This null may be carefully handled
+            //Isnt the best solution, but didnt came up with another idea
+            return null;
         }
     }
 
@@ -268,17 +292,6 @@ public class Customer {
         return -1;
     }
 
-    private boolean isTellerAvailable(Teller t) {
-        //The same comment as in isAccAv
-        for (Teller iTel : avTeller) {
-            if (iTel.getId() == t.getId()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     //Setters and getters
     public int getId() {
         return this.id;
@@ -307,8 +320,8 @@ public class Customer {
     public int getBank() {
         return this.bankId;
     }
-    
-    public ArrayList<Card> getCards(){
-       return this.cards;
+
+    public ArrayList<Card> getCards() {
+        return this.cards;
     }
 }

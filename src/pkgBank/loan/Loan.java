@@ -30,9 +30,16 @@ public class Loan {
     //Added by myself. Extends Loan and Account functionality
     private final float amount;
     
-    //Todo: set types as enum or smth similiat to narrow down options
-    public Loan(Customer customer, Account account, LoanTypes t, float amount){
+    public Loan(Customer customer, Account account, LoanTypes t, float amount)
+    throws IllegalArgumentException{
         System.out.println("Initializing Loan instance");
+        //This exception will prevent Customer-account incompatibilites
+        if(customer.getId() != account.getCustomer()){
+            String f = String.format("Account n°: %x does not belongs to %s", 
+                    account.getId(), customer.getName());
+            throw new IllegalArgumentException(f);
+        }
+        
         this.id = ++loanCount;
         //todo: set customerId with customer.getId method
         this.customerId = 2;
