@@ -6,7 +6,6 @@ package pkgBank;
 
 import java.util.ArrayList;
 import pkgExceptions.ErrorObjeto;
-import pkgPpl.Customer;
 
 /**
  *

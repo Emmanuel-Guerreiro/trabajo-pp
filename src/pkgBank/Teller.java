@@ -3,7 +3,6 @@ package pkgBank;
 import java.util.ArrayList;
 import pkgBank.loan.Loan;
 import pkgBank.loan.LoanTypes;
-import pkgPpl.Customer;
 
 /**
  *
@@ -14,22 +13,22 @@ public class Teller {
     private static int tellCount;
     private final int id;
     private int bankId; //This isnt final because on some cases, this can be initialized later on 
-    private String name;
+    private final String name;
     private ArrayList<Customer> customerAt;
 
-    //TODO: End this constructor
     //Used just if at least one bank has been defined
-    public Teller(Bank b) {
+    public Teller(String n, Bank b) {
         System.out.println("Initializing Teller instance");
         this.id = tellCount++;
         this.bankId = b.getId();
-
+        this.name = n;
     }
 
     //This is used to initialize a Teller before any bank has been defined
-    public Teller() {
+    public Teller(String n) {
         System.out.println("Initializing Teller instance");
         this.id = tellCount++;
+        this.name = n;
     }
 
     public float collectMoney(float inc, Account a) {
@@ -66,15 +65,14 @@ public class Teller {
         return status;
     }
 
-    /*
-    * TODO: - On error should throw an exeption 
-    *       <Check if this exception is one of java's library or make a new one>
-    *
-    *       - Should be void or Loan type?
-    *
-     */
-    public void loanRequest(Customer c, Account acc, Loan l) {
-        //Gives Add a new loan to a customer. And returns it
+    
+    public Loan loanRequest(Customer c, Account acc, Loan l)
+            throws IllegalArgumentException {
+        /**
+         * Gives Add a new loan to a customer. And returns it If the account is
+         * not from this client or the loan is not for this client or the loan
+         * is not for this account will throw IllegalArgumentException
+         */
 
         //Is more verbose but cleanear than all inside condition
         int idx = custIdx(c);                             //Check customer is attended by this teller
@@ -82,33 +80,60 @@ public class Teller {
         boolean isThisL = l.getCustomer() == c.getId();   //Check if this loan is for this client
         boolean isThisLC = l.getAccount() == acc.getId(); //Check if this loan is for this account
 
-        if (idx != -1 && isThisC && isThisL && isThisLC) {
-            //If all ok will add it.
-            //WIll add the loan to client's list.
-            //WIll increment account credit
-
-            //Is everything checked before calling the method. 
-            //In consecuence, isnt necessary to handle possible errors
-            c.addLoan(l);
-            acc.incCredit(l.getAmount());
-        } else {
-            //Should throw the exception here
+        if (idx == -1) {
+            String f = String.format("%s isnt attended by this teller",
+                    c.getName());
+            throw new IllegalArgumentException(f);
+        }
+        if (!isThisC) {
+            String f = String.format("Account n°: %x doesnt belongs to client %s",
+                    acc.getId(), c.getName());
+            throw new IllegalArgumentException(f);
+        }
+        if (!isThisL) {
+            String f = String.format("Loan n°: %x doesnt belongs to client %s",
+                    acc.getId(), c.getName());
+            throw new IllegalArgumentException(f);
+        }
+        if (!isThisLC) {
+            String f = String.format("Loan n°: %x isnt for account %s",
+                    l.getId(), acc.getId());
+            throw new IllegalArgumentException(f);
         }
 
+        //If arrived up to here, should be all right. An then add it
+        c.addLoan(l);
+        acc.incCredit(l.getAmount());
+
+        return l;
     }
 
-    public void loanRequest(Customer c, Account account, LoanTypes t, float amount) {
+    public Loan loanRequest(Customer c, Account account, LoanTypes t, float amount)
+            throws IllegalArgumentException {
         //Checks the customer is attended by this teller
         //Checks if the accounts belongs to the client
-        if (custIdx(c) != -1 && account.getCustomer() == c.getId()) {
-            Loan l = new Loan(c, account, t, amount);
 
-            c.addLoan(l);
-            account.incCredit(amount);
+        //This check outside seems more verbose, but avoids repeating calcs
+        boolean isAtt = custIdx(c) != -1;
+        boolean accBelongs = account.getCustomer() == c.getId();
 
-        } else {
-            //SHould throw the exception here
+        if (!isAtt) {
+            String f = String.format("%s isnt attended by this teller",
+                    c.getName());
+            throw new IllegalArgumentException(f);
+        } else if (!accBelongs) {
+            String f = String.format("Account n°: %x doesnt belongs to client %s",
+                    account.getId(), c.getName());
+            throw new IllegalArgumentException(f);
         }
+
+        //If arrived up to here. Seems to be all ok
+        Loan l = new Loan(c, account, t, amount);
+
+        c.addLoan(l);
+        account.incCredit(amount);
+
+        return l;
 
     }
 
@@ -180,6 +205,9 @@ public class Teller {
     }
 
     public void setBank(int bId) {
-        this.bankId = bId;
+        //BankId just can be defined once. And cant be 0
+        if (this.bankId == 0 && bId > 0) {
+            this.bankId = bId;
+        }
     }
 }

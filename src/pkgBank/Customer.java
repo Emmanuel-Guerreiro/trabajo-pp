@@ -1,4 +1,4 @@
-package pkgPpl;
+package pkgBank;
 
 import java.util.ArrayList;
 import pkgBank.Account;

@@ -9,5 +9,5 @@ package pkgBank.loan;
  * May be redefined and nothing will change.
  */
 public enum LoanTypes{
- PERSONAL, COMPANY, FAST, LONG   
+ PERSONAL, COMPANY, FAST, OTHER   
 }

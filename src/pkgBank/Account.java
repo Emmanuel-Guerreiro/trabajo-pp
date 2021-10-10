@@ -1,7 +1,5 @@
 package pkgBank;
 
-import pkgPpl.Customer;
-
 /**
  *
  * @author emma

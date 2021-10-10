@@ -1,7 +1,6 @@
 package pkgBank;
 
 import java.util.ArrayList;
-import pkgPpl.Customer;
 
 /**
  * THis class was not on the original class model Added by myself for

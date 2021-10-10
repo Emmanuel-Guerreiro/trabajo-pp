@@ -5,7 +5,7 @@
 package pkgBank.loan;
 
 import pkgBank.Account;
-import pkgPpl.Customer;
+import pkgBank.Customer;
 
 /**
  *
