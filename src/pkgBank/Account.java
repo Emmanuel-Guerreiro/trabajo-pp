@@ -72,4 +72,8 @@ public class Account {
         System.out.println("Cuentas creadas: " + accountsCount);
     }
 
+    public float getCredit(){
+        return this.credit;
+    }
+    
 }

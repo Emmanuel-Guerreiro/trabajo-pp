@@ -19,6 +19,9 @@ public class Teller {
     //Used just if at least one bank has been defined
     public Teller(String n, Bank b) {
         System.out.println("Initializing Teller instance");
+        
+        this.customerAt = new ArrayList<>();
+        
         this.id = tellCount++;
         this.bankId = b.getId();
         this.name = n;
@@ -27,6 +30,9 @@ public class Teller {
     //This is used to initialize a Teller before any bank has been defined
     public Teller(String n) {
         System.out.println("Initializing Teller instance");
+        
+        this.customerAt = new ArrayList<>();
+        
         this.id = tellCount++;
         this.name = n;
     }

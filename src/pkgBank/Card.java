@@ -9,38 +9,49 @@ import java.util.ArrayList;
  * @author emma
  */
 public class Card {
+
     private static int cardCount;
     private final int customerId;
     private final int id;
     private ArrayList<String> issues;
-    
-    public Card(Customer c){
+
+    public Card(Customer c) {
+
+        System.out.println("Initializing Card instance");
+
+        this.issues = new ArrayList<>();
+
         this.id = ++cardCount;
         this.customerId = c.getId();
     }
- 
-    public Card(int cId){
+
+    public Card(int cId) {
+
+        System.out.println("Initializing Card instance");
+
+        this.issues = new ArrayList<>();
+
         this.id = ++cardCount;
         this.customerId = cId;
     }
-    
-    public int getCustomer(){
+
+    public int getCustomer() {
         return this.customerId;
     }
-    
-    public int getId(){
+
+    public int getId() {
         return this.id;
     }
-    
-    public ArrayList<String> getIssues(){
+
+    public ArrayList<String> getIssues() {
         return issues;
     }
-    
-    public void addIsue(String issue){
+
+    public void addIsue(String issue) {
         issues.add(issue);
     }
-    
-    public int getIssueCount(){
+
+    public int getIssueCount() {
         return issues.size();
     }
 }

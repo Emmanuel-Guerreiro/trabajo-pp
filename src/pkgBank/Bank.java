@@ -25,6 +25,7 @@ public class Bank {
 
     //Cant initialize more than 3 banks
     public Bank(String n, String l, Teller t, Customer c) throws ErrorObjeto {
+        
         System.out.println("Initializing Bank instance");
         if (Bank.bankCount >= 3) {
             throw new ErrorObjeto("Bank");
@@ -32,6 +33,11 @@ public class Bank {
         this.bankId = bankCount++;
         this.name = n;
         this.location = l;
+        
+        //Initialize arrayLists
+        this.customerList = new ArrayList<>();
+        this.tellerList = new ArrayList<>();
+        
         customerList.add(c);
         tellerList.add(t);
     }
