@@ -13,6 +13,11 @@
 
 ## Comentarios sobre la implementación :rocket:
 
+- Para poder correr el programa hay dos opciones.
+
+  - Se definen un conjunto de objetos e interacciones entre estos, en el metodo main.
+  - Se corre desde la terminal, con el flag **-a** o **--automatic**, para que corra la funcion encargada de hacer una muestra
+
 - Todo el trabajo esta realizado en ingles por conveniencia propia.
 - Los id de los distintos objetos son definidos automaticamente por los
   constructures. Esto se realiza con una variable de clase, que se
@@ -25,6 +30,10 @@
   de clases resultante)
 - Se ha definido de manera arbitraria valores posibles para los tipos de Loan
   con un enum. Estos son extensibles desde el archivo Types en el package pkgBank.loan
-- Para poder correr el programa hay dos opciones.
-  - Se definen un conjunto de objetos e interacciones entre estos, en el metodo main.
-  - Se corre desde la terminal, con el flag **-a** o **--automatic**, para que corra la funcion encargada de hacer una muestra
+
+## Diagrama de clases:
+
+El diagrama de clases (Guardado en este mismo directorio bajo el nombre Diagrama.jpeg)
+incluye la clase Card para poder interactuar mejor con el metodo Request card
+
+![screenshot](Diagrama.jpeg)
